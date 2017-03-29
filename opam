@@ -1,0 +1,26 @@
+opam-version: "2.0"
+name:         "type-beat"
+version:      "dev"
+maintainer:   "Romain Calascibetta <romain.calascibetta@gmail.com>"
+authors:      "Romain Calascibetta <romain.calascibetta@gmail.com>"
+homepage:     "https://github.com/oklm-wsh/TypeBeat"
+bug-reports:  "https://github.com/oklm-wsh/TypeBeat/issues"
+dev-repo:     "https://github.com/oklm-wsh/TypeBeat.git"
+license:      "MIT"
+
+build: [
+  "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" "--tests" "false"
+]
+
+build-test: [
+  [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" "--tests" "true" ]
+  [ "ocaml" "pkg/pkg.ml" "test" ]
+]
+
+depends: [
+  "ocamlbuild"     {build}
+  "ocamlfind"      {build}
+  "topkg"          {build}
+  "angstrom"
+  "ocaml"          {build & >= "4.01.0"}
+]
