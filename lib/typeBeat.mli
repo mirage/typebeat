@@ -21,7 +21,6 @@
     name starting with ["X-"] to indicate its non-standard status and to avoid a
     potential conflict with a future officiel name.
 *)
-
 type ty      =
   [ `Application
   | `Audio
@@ -104,6 +103,8 @@ val pp_parameter  : Format.formatter -> (string * value) -> unit
 (** [pp content] prints an human readable representation of {!content}. *)
 val pp            : Format.formatter -> content -> unit
 
+val make          : ?parameters:(string * value) list -> ty -> subty -> content
+
 (** Default {{:https://tools.ietf.org/html/rfc822}RFC822} messages without a
     MIME ["Content-Type"] header are taken by this protocol to be plain text in
     the US-ASCII character set, which can be excplicitly specified as:
@@ -118,19 +119,37 @@ val pp            : Format.formatter -> content -> unit
 *)
 val default       : content
 
-val make          : ?parameters:(string * value) list -> ty -> subty -> content
+(** The angstrom parser. *)
+val parser        : content Angstrom.t
 
-(** [of_string ~chunk:1024 buf] parses an
+type error =
+  [ `Invalid of (string * string list)
+  | `Incomplete ]
+
+(** [of_string str] parses an
     {{:https://tools.ietf.org/html/rfc2045#section-5.1}RFC2045} {!content}
-    starting at [0] in [buf].
+    starting at [0] in [str]. We put on the string [str] the CRLF line break at
+    the end so we ensure than the parsing terminate.
 *)
-val of_string     : string -> content option
+val of_string     : string -> (content, error) result
 
-(** [of_string_raw buff off len] parses an
+(** [of_string_with_crlf str] parses an
     {{:https://tools.ietf.org/html/rfc2045#section-5.1}RFC2045} {!content}
-    starting at [off] in [buf] to a tuple [(content, count)] with:
+    starting at [0] in [str]. We {b don't} put on the string [str] the CRLF line
+    break but we expect this line break inside [str]. We need the CRLF line
+    break to terminate the parsing.
+*)
+val of_string_with_crlf : string -> (content, error) result
+
+(** [of_string_raw str off len] parses an
+    {{:https://tools.ietf.org/html/rfc2045#section-5.1}RFC2045} {!content}
+    starting at [off] in [str] to a tuple [(content, count)] with:
 
     - [content] the {!content}
     - [count] the number of byte read starting at [off] to parse the [content].
+
+    We {b don't} put on the string [str] the CRLF line break at the end but we
+    expect this line break inside [str]. We the the CRLF line break to terminate
+    the parsing.
 *)
-val of_string_raw : string -> int -> int -> (content * int) option
+val of_string_raw : string -> int -> int -> (content * int, error) result

@@ -59,22 +59,36 @@ let default =
 
 open Angstrom.Unbuffered
 
-let of_string s =
-  let s = s ^ "\r\n" in
+type error =
+  [ `Invalid of (string * string list)
+  | `Incomplete ]
 
-  let aux = function
-    | Fail _ | Partial _ -> None
-    | Done (_, v) -> Some v
+let parser = Rfc2045.content
+
+let of_string_with_crlf s =
+  let rec aux second_time = function
+    | Fail (_, path, err) -> Error (`Invalid (err, path))
+    | Partial { continue; _ } ->
+      if second_time
+      then Error `Incomplete
+      else aux true @@ continue (`String s) Complete (* avoid the CFWS token *)
+    | Done (_, v) -> Ok v
   in
 
-  aux @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* Rfc822.crlf <* commit)
+  aux false @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* Rfc822.crlf <* commit)
+
+let of_string s = of_string_with_crlf (s ^ "\r\n")
 
 let of_string_raw s off len =
   let s = String.sub s off len in
 
-  let aux = function
-    | Fail _ | Partial _ -> None
-    | Done (committed, v) -> Some (v, committed)
+  let rec aux second_time = function
+    | Fail (_, path, err) -> Error (`Invalid (err, path))
+    | Partial {  continue; _ } ->
+      if second_time
+      then Error `Incomplete
+      else aux true @@ continue (`String s) Complete (* avoid the CFWS token *)
+    | Done (committed, v) -> Ok (v, committed)
   in
 
-  aux @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* Rfc822.crlf <* commit)
+  aux false @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* Rfc822.crlf <* commit)
