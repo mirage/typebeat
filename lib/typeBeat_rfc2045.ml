@@ -120,7 +120,7 @@ let subty ty =
   (peek_char >>= function
    | Some 'X' | Some 'x' -> extension_token
    | _ -> token >>| fun v ->
-     try `Iana_token (Iana.Set.find v (Iana.Map.find (ty_to_string ty) Iana.iana))
+     try `Iana_token (Iana.Set.find (String.lowercase_ascii v) (Iana.Map.find (ty_to_string ty) Iana.iana))
      with _ -> `X_token v)
   >>| fun subty -> (ty, subty)
 
