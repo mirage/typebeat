@@ -1,5 +1,5 @@
-TypeBeat - Agnostic parsing of the `Content-Type` in OCaml
-==========================================================
+TypeBeat - Agnostic parser of the `Content-Type` in OCaml
+=========================================================
 
 TypeBeat is a pure implementation of the parsing of the `Content-Type`'s value
 (see [RFC822](https://tools.ietf.org/html/rfc822)
