@@ -8,12 +8,11 @@ dev-repo:     "https://github.com/oklm-wsh/TypeBeat.git"
 license:      "MIT"
 
 build: [
-  "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" "--tests" "false"
+  "ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{dev}%"
 ]
 
 build-test: [
-  [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" "--tests" "true" ]
-  [ "ocaml" "pkg/pkg.ml" "test" ]
+  [ "ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{dev}%" ]
 ]
 
 depends: [
