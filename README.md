@@ -2,9 +2,9 @@ TypeBeat - Agnostic parser of the `Content-Type` in OCaml
 =========================================================
 
 TypeBeat is a pure implementation of the parsing of the `Content-Type`'s value
-(see [RFC822](https://tools.ietf.org/html/rfc822)
-and [RFC2045](https://tools.ietf.org/html/rfc2045)). The reason of this *light*
-library is to compute a complexe rule. Indeed, it's __hard__ to parse the value
+(see [RFC822](https://tools.ietf.org/html/rfc822) and
+[RFC2045](https://tools.ietf.org/html/rfc2045)). The reason of this *light*
+library is to compute a complex rule. Indeed, it's __hard__ to parse the value
 of the `Content-Type`, believe me.
 
 So it's a common library if you want to know the value of the `Content-Type` and
@@ -20,29 +20,31 @@ TypeBeat can be installed with `opam`:
 
 ## Explanation
 
-TypeBeat uses the cool and funny [Angstrom](https://github.com/) library to
-parse the value of the `Content-Type`. If you want to implement an e-mail parser
-(like [MrMime](https://github.com/oklm-wsh/MrMime)) or an HTTP server
+TypeBeat uses the cool and funny [Angstrom] library to parse the value of the
+`Content-Type`. If you want to implement an email parser (like
+[MrMime](https://github.com/oklm-wsh/MrMime)) or an HTTP server
 ([CoHTTP](https://github.com/mirage/ocaml-cohttp)), firstly, these already
 exist, too bad.
 
-This parser handles the complexe rule like the `CFWS` token and others weird
-rules from olds and stupids RFCs. The point is to centralize in one library
-(because you can find the `Content-Type` crazy rule in some differents
-protocols) this parser.
+[Angstrom]: https://github.com/inhabitedtype/angstrom
 
-Then, the API was thinked to be *easy to use*:
+This parser handles complex rules like the `CFWS` token and other weird rules
+from old and stupid RFCs. The point is to centralize all these parsers in one
+library (because you can find the `Content-Type` crazy rule in some different
+protocols) .
+
+Then, the API was designed to be *easy to use*:
 
 ```ocaml
 val of_string : string -> (content, error) result
 val of_string_raw : string -> int -> int -> (content * int, error) result
 ```
 
-The first transform the `string` to a `Content-Type` value. The second is
-generally used by another parser (like an HTTP protocol parser) to parse a part
-of the `string` and return how many byte(s) the parser compute.
+The first transforms its `string` argument into a `Content-Type` value. The
+second is generally used by another parser (like an HTTP protocol parser) to
+parse a part of the `string` and return how many bytes the parser consumed.
 
-If you are a warrior of the Angstrom library, you can use the parser:
+If you are a __warrior__ of the Angstrom library, you can use the parser:
 
 ```ocaml
 val parser : content Angstrom.t
@@ -50,9 +52,9 @@ val parser : content Angstrom.t
 
 But the parser does not terminate because we have the `CFWS` token at the end.
 What that means? The parser expect an `End of input` or any character different
-than `wsp` (and you can produce that by `Angstrom.Unbuffered.Complete`) to check
-than the hypothetic next line is a new field. Because, as you know, we can write
-something like:
+than `wsp` (and you can produce that by `Angstrom.Unbuffered.Complete`) to
+check that the hypothetical next line is a new field. Because, as you know, we
+can write something like:
 
 ```
 Content-Type: text/html;^CRLF
@@ -63,13 +65,13 @@ And it still valid (see RFC822)!
 
 Another point is that this library has all
 of [IANA](https://www.iana.org/assignments/media-types/media-types.xhtml) media
-type database (dated from 2016-06-01), so we recognize the IANA media type
+type database (dated from 2016-06-01), so we recognize the IANA media types
 automatically.
 
 ## Build Requirements
 
  * OCaml >= 4.01.0
- * [Angstrom](https://github.com/inhabitedtype/angstrom)
+ * [Angstrom]
  * `topkg`, `ocamlfind` and `ocamlbuild` to build the project
 
 ## Improvement
