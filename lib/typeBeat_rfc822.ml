@@ -5,8 +5,6 @@ type msg_id = (local * domain)
 
 open Angstrom
 
-let one p = lift2 (fun x r -> x :: r) p (many p)
-
 let is_vchar = function
   | '\x21' .. '\x7e' -> true
   | _ -> false
@@ -89,8 +87,8 @@ let obs_fws =
     @@ fun m -> (lift2 (fun _ _ -> (true, true)) p m)
                 <|> return (false, false)
   in
-  one wsp
-  *> (many' (crlf *> (one wsp)))
+  many1 wsp
+  *> (many' (crlf *> (many1 wsp)))
   >>| fun (has_crlf, has_wsp) -> (true, has_crlf, has_wsp)
 
 let fws =
@@ -100,7 +98,7 @@ let fws =
   in
   obs_fws
   <|> ((option (false, false) (many' wsp <* crlf))
-       >>= fun (has_wsp, has_crlf) -> one wsp
+       >>= fun (has_wsp, has_crlf) -> many1 wsp
        *> return (has_wsp, has_crlf, true))
 
 let ignore p = p *> return ()
@@ -118,7 +116,7 @@ let comment =
   *> return ()
 
 let cfws =
-  ((one ((option (false, false, false) fws)
+  ((many1 ((option (false, false, false) fws)
          *> comment)
     *> (option (false, false, false) fws))
    <|> fws)
@@ -175,10 +173,9 @@ let local_part =
   <|> (quoted_string >>| fun s -> [`String s])
 
 let obs_domain =
-  atom
-  >>= fun x -> fix (fun m -> (lift2 (fun x r -> x :: r) (char '.' *> atom) m)
-                             <|> return [])
-  >>| fun r -> x :: r
+  lift2 (fun x r -> x :: r)
+    atom
+    (many1 (char '.' *> atom))
 
 let domain_literal =
   (option () cfws)
