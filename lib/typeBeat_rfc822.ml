@@ -80,7 +80,7 @@ let quoted_pair =
   *> satisfy is_quoted_pair
   >>= fun x -> return (of_escaped_character x)
 
-let wsp = satisfy (function '\x09' | '\x20' -> true | _ -> false)
+let wsp = satisfy is_wsp
 
 let crlf = char '\r' *> char '\n' *> return ()
 
