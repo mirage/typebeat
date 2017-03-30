@@ -173,10 +173,9 @@ let local_part =
   <|> (quoted_string >>| fun s -> [`String s])
 
 let obs_domain =
-  atom
-  >>= fun x -> fix (fun m -> (lift2 (fun x r -> x :: r) (char '.' *> atom) m)
-                             <|> return [])
-  >>| fun r -> x :: r
+  lift2 (fun x r -> x :: r)
+    atom
+    (many1 (char '.' *> atom))
 
 let domain_literal =
   (option () cfws)
