@@ -1,6 +1,5 @@
-true: safe_string, bin_annot, debug
+true: safe_string, bin_annot
+true: package(angstrom)
 <*/*>: warn_error(+1..49), warn(A-4-41-44)
 
 <lib>: include
-
-<lib/*.{ml,mli,cma,cmxa}>: package(angstrom)
