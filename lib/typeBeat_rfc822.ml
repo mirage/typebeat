@@ -155,14 +155,11 @@ let word =
   <|> (quoted_string >>| fun s -> `String s)
 
 let obs_local_part =
-  let p = word in
-  let s = char '.' in
-  fix (fun m -> lift2 (fun x r -> x :: r) p ((s *> m) <|> return []))
+  sep_by1 (char '.') word
 
 let dot_atom_text =
-  let p = take_while1 is_atext in (* TODO: replace satisfy and handle unicode. *)
-  let s = char '.' in
-  fix (fun m -> lift2 (fun x r -> x :: r) p ((s *> m) <|> return []))
+  (* TODO: replace satisfy and handle unicode. *)
+  sep_by1 (char '.') (take_while1 is_atext)
 
 let dot_atom =
   (option () cfws) *> dot_atom_text <* (option () cfws)
