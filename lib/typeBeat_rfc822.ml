@@ -206,11 +206,6 @@ let id_right =
   <|> (dot_atom_text >>| fun domain -> `Domain domain)
 
 let msg_id =
-  (option () cfws)
-  *> char '<'
-  *> id_left
-  >>= fun left -> char '@'
-  *> id_right
-  >>= fun right -> char '>'
-  *> (option () cfws)
-  >>| fun () -> (left, right)
+  lift2 (fun x y -> (x, y))
+    (option () cfws *> char '<' *> id_left)
+    (id_right <* option () cfsw)
