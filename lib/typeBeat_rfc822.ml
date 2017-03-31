@@ -73,10 +73,9 @@ let of_escaped_character = function
 
 let e = char '\\'
 
-let quoted_pair =
-  char '\\'
-  *> satisfy is_quoted_pair
-  >>= fun x -> return (of_escaped_character x)
+let quoted_pair_ignore, quoted_pair =
+  let quoted_char = char '\\' *> satisfy is_quoted_pair in
+  quoted_char *> return (), quoted_char >>| of_escaped_character
 
 let wsp = satisfy is_wsp
 
