@@ -9,11 +9,11 @@ doc:          "https://oklm-wsh.github.io/TypeBeat/"
 license:      "MIT"
 
 build: [
-  "ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{dev}%"
+  "ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{pinned}%"
 ]
 
 build-test: [
-  [ "ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{dev}%" ]
+  [ "ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{pinned}%" ]
 ]
 
 depends: [
