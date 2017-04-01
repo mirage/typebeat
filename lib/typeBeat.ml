@@ -50,8 +50,58 @@ let pp fmt { ty; subty; parameters; } =
     (pp_lst ~sep:(fun fmt () -> pp fmt ";@ ") pp_parameter) parameters
 
 let make ?(parameters = []) ty subty =
+  let subty =
+    try `Iana_token (Iana.Set.find (String.lowercase_ascii subty) (Iana.Map.find (Rfc2045.ty_to_string ty) Iana.iana))
+    with _ -> `X_token subty
+  in
   let parameters = List.map (fun (k, v) -> (String.lowercase_ascii k, v)) parameters in
   { ty; subty; parameters }
+
+let equal_ty a b = match a, b with
+  | `Ietf_token a, `Ietf_token b
+  | `X_token a, `X_token b ->
+    String.equal (String.lowercase_ascii a) (String.lowercase_ascii b)
+  | a, b -> a = b
+
+let equal_subty a b = match a, b with
+  | `Ietf_token a, `Ietf_token b
+  | `Iana_token a, `Iana_token b
+  | `X_token a, `X_token b ->
+    String.equal (String.lowercase_ascii a) (String.lowercase_ascii b)
+  | _, _ -> false
+
+let equal_parameter ?(insensitive = `All) a b =
+  let insensitive = match insensitive with
+    | `Parameters keys -> `Parameters (List.map String.lowercase_ascii keys) | x -> x in
+
+  match a, b with
+  | (key_a, `Token value_a), (key_b, `Token value_b)
+  | (key_a, `Token value_a), (key_b, `String value_b)
+  | (key_a, `String value_a), (key_b, `Token value_b)
+  | (key_a, `String value_a), (key_b, `String value_b) ->
+    if String.equal
+        (String.lowercase_ascii key_a)
+        (String.lowercase_ascii key_b)
+    then match insensitive with
+      | `Parameters keys when List.exists (String.equal (String.lowercase_ascii key_a)) keys ->
+        String.equal
+          (String.lowercase_ascii value_a)
+          (String.lowercase_ascii value_b)
+      | `All ->
+        String.equal
+          (String.lowercase_ascii value_a)
+          (String.lowercase_ascii value_b)
+      | _ ->
+        String.equal value_a value_b
+    else false
+
+let equal_parameters ?insensitive a b =
+  List.for_all2 (equal_parameter ?insensitive) a b
+
+let equal ?(insensitive = `Parameters [ "boundaries" ]) a b =
+  equal_ty a.ty b.ty
+  && equal_subty a.subty b.subty
+  && equal_parameters ~insensitive a.parameters b.parameters
 
 let default =
   { ty = `Text

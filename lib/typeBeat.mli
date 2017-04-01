@@ -103,7 +103,9 @@ val pp_parameter  : Format.formatter -> (string * value) -> unit
 (** [pp content] prints an human readable representation of {!content}. *)
 val pp            : Format.formatter -> content -> unit
 
-val make          : ?parameters:(string * value) list -> ty -> subty -> content
+val make          : ?parameters:(string * value) list -> ty -> string -> content
+
+val equal         : ?insensitive:[ `All | `Parameters of string list ] -> content -> content -> bool
 
 (** Default {{:https://tools.ietf.org/html/rfc822}RFC822} messages without a
     MIME ["Content-Type"] header are taken by this protocol to be plain text in
