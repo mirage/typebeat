@@ -23,4 +23,4 @@ depends: [
   "angstrom"
 ]
 
-availabe: [ocaml-version >= "4.03.0"]
+available: [ocaml-version >= "4.03.0"]
