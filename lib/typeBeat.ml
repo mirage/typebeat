@@ -75,7 +75,15 @@ let of_string_with_crlf s =
     | Done (_, v) -> Ok v
   in
 
-  aux false @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* Rfc822.crlf <* commit)
+  aux false @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* option () Rfc822.cfws <* Rfc822.crlf <* commit)
+
+  (* XXX(dinosaure): the last CFWS was due to: 'Content-Type: CFWS content-value
+                     CFWS CRLF'. the [content] handles the CFWS token inside the
+                     Content-Type's value but not in the field value (as we can
+                     find in RFC2045). with this, we can put a comment after the
+                     Content-Type's value. Otherwise, we expect directly the
+                     CRLF line-break without any comment.
+   *)
 
 let of_string s = of_string_with_crlf (s ^ "\r\n")
 
@@ -91,4 +99,4 @@ let of_string_raw s off len =
     | Done (committed, v) -> Ok (v, committed)
   in
 
-  aux false @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* Rfc822.crlf <* commit)
+  aux false @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* option () Rfc822.cfws <* Rfc822.crlf <* commit)
