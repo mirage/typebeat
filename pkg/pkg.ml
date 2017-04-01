@@ -10,4 +10,5 @@ let () =
   Ok [ Pkg.lib "pkg/META"
      ; Pkg.doc "README.md"
      ; Pkg.doc "CHANGES.md"
-     ; Pkg.lib ~exts:Exts.module_library "lib/typeBeat" ]
+     ; Pkg.lib ~exts:Exts.module_library "lib/typeBeat"
+     ; Pkg.test "test/test" ]
