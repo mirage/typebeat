@@ -2,4 +2,4 @@ S lib
 
 B _build/lib
 
-PKG angstrom
+PKG angstrom alcotest

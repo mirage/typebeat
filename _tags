@@ -3,3 +3,4 @@ true: package(angstrom)
 <*/*>: warn_error(+1..49), warn(A-4-41-44)
 
 <lib>: include
+<test/*>: package(alcotest)
