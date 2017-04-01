@@ -17,9 +17,10 @@ build-test: [
 ]
 
 depends: [
-#  "ocamlbuild"     {build}
-#  "ocamlfind"      {build}
-#  "topkg"          {build}
+  "ocamlbuild"     {build}
+  "ocamlfind"      {build}
+  "topkg"          {build}
   "angstrom"
-#  "ocaml"          {build & >= "4.01.0"}
 ]
+
+availabe: [ocaml-version >= "4.03.0"]
