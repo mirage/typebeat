@@ -73,10 +73,9 @@ let of_escaped_character = function
 
 let e = char '\\'
 
-let quoted_pair =
-  char '\\'
-  *> satisfy is_quoted_pair
-  >>= fun x -> return (of_escaped_character x)
+let quoted_pair_ignore, quoted_pair =
+  let quoted_char = char '\\' *> satisfy is_quoted_pair in
+  quoted_char *> return (), quoted_char >>| of_escaped_character
 
 let wsp = satisfy is_wsp
 
@@ -105,15 +104,19 @@ let ignore p = p *> return ()
 
 let comment =
   (fix @@ fun comment ->
-   let ccontent = (ignore @@ take_while1 is_ctext) (* TODO: replace take_while and handle unicode. *)
-                   <|> (ignore quoted_pair)
-                   <|> (ignore comment)
+    let ccontent =
+      peek_char_fail <?> "comment"
+      >>= function
+        | '('               -> comment
+        | '\\'              -> quoted_pair_ignore
+        | c when is_ctext c -> skip_while is_ctext  (* TODO: replace skip_while and handle unicode. *)
+        | _                 -> fail "comment"
    in
    char '('
    *> (many ((option (false, false, false) fws) *> ccontent))
    *> (option (false, false, false) fws)
-   *> char ')')
-  *> return ()
+   *> char ')'
+   *> return ())
 
 let cfws =
   ((many1 ((option (false, false, false) fws)
