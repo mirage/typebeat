@@ -81,8 +81,8 @@ let x_token =
   *> token
 
 let extension_token =
-  peek_char >>= function
-  | Some 'X' | Some 'x' -> x_token >>| fun v -> `X_token v
+  peek_char_fail <?> "extension_token" >>= function
+  | 'X' | 'x' -> x_token >>| fun v -> `X_token v
   | _ -> ietf_token >>| fun v -> `Ietf_token v
 
 let composite_ty =
@@ -117,8 +117,8 @@ let ty_to_string = function
   | `Ietf_token s | `X_token s -> s
 
 let subty ty =
-  (peek_char >>= function
-   | Some 'X' | Some 'x' -> extension_token
+  (peek_char_fail <?> "subty" >>= function
+   | 'X' | 'x' -> extension_token
    | _ -> token >>| fun v ->
      try `Iana_token (Iana.Set.find (String.lowercase_ascii v) (Iana.Map.find (ty_to_string ty) Iana.iana))
      with _ -> `X_token v)
