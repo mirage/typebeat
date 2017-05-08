@@ -93,16 +93,16 @@ let iana =
            "css";
            "csv";
            "csv-schema";
-           "directory - DEPRECATED by RFC6350";
+           "directory"; (* DEPRECATED by RFC6350 *)
            "dns";
-           "ecmascript - OBSOLETED in favor of application/ecmascript";
+           "ecmascript"; (* OBSOLETED in favor of application/ecmascript *)
            "encaprtp";
            "enriched";
            "example";
            "fwdred";
            "grammar-ref-list";
            "html";
-           "javascript - OBSOLETED in favor of application/javascript";
+           "javascript"; (* OBSOLETED in favor of application/javascript *)
            "jcr-cnd";
            "markdown";
            "mizar";
@@ -148,7 +148,7 @@ let iana =
            "vnd.ms-mediapackage";
            "vnd.net2phone.commcenter.command";
            "vnd.radisys.msml-basic-layout";
-           "vnd.si.uricatalogue - OBSOLETED by request";
+           "vnd.si.uricatalogue"; (* OBSOLETED by request *)
            "vnd.sun.j2me.app-descriptor";
            "vnd.trolltech.linguist";
            "vnd.wap.si";
@@ -211,14 +211,14 @@ let iana =
                     "global-headers";
                     "http";
                     "imdn+xml";
-                    "news - OBSOLETED by RFC5537";
+                    "news"; (* OBSOLETED by RFC5537 *)
                     "partial";
                     "rfc822";
                     "s-http";
                     "sip";
                     "sipfrag";
                     "tracking-status";
-                    "vnd.si.simp - OBSOLETED by request";
+                    "vnd.si.simp"; (* OBSOLETED by request *)
                     "vnd.wfa.wsc"])
                 (Map.add "image"
                    (Set.of_list
@@ -274,8 +274,8 @@ let iana =
                        "vnd.xiff";
                        "vnd.zbrush.pcx";
                        "wmf";
-                       "x-emf - DEPRECATED in favor of image/emf";
-                       "x-wmf - DEPRECATED in favor of image/wmf"])
+                       "x-emf"; (* DEPRECATED in favor of image/emf *)
+                       "x-wmf"]) (* DEPRECATED in favor of image/wmf *)
                    (Map.add "examples" (Set.of_list [])
                       (Map.add "audio"
                          (Set.of_list
@@ -415,7 +415,7 @@ let iana =
                              "vnd.nuera.ecelp7470";
                              "vnd.nuera.ecelp9600";
                              "vnd.octel.sbc";
-                             "vnd.qcelp - DEPRECATED in favor of audio/qcelp";
+                             "vnd.qcelp"; (* DEPRECATED in favor of audio/qcelp *)
                              "vnd.rhetorex.32kadpcm";
                              "vnd.rip";
                              "vnd.sealedmedia.softseal.mpeg";
@@ -704,7 +704,7 @@ let iana =
                                 "simple-message-summary";
                                 "simpleSymbolContainer";
                                 "slate";
-                                "smil - OBSOLETED in favor of application/smil+xml";
+                                "smil"; (* OBSOLETED in favor of application/smil+xml *)
                                 "smil+xml";
                                 "smpte336m";
                                 "soap+fastinfoset";
@@ -803,7 +803,7 @@ let iana =
                                 "vnd.api+json";
                                 "vnd.apple.installer+xml";
                                 "vnd.apple.mpegurl";
-                                "vnd.arastra.swi - OBSOLETED in favor of application/vnd.aristanetworks.swi";
+                                "vnd.arastra.swi"; (* OBSOLETED in favor of application/vnd.aristanetworks.swi *)
                                 "vnd.aristanetworks.swi";
                                 "vnd.artsquare";
                                 "vnd.astraea-software.iota";
@@ -978,7 +978,7 @@ let iana =
                                 "vnd.fuzzysheet";
                                 "vnd.genomatix.tuxedo";
                                 "vnd.geo+json";
-                                "vnd.geocube+xml - OBSOLETED by request";
+                                "vnd.geocube+xml"; (* OBSOLETED by request *)
                                 "vnd.geogebra.file";
                                 "vnd.geogebra.tool";
                                 "vnd.geometry-explorer";
@@ -988,7 +988,7 @@ let iana =
                                 "vnd.gerber";
                                 "vnd.globalplatform.card-content-mgt";
                                 "vnd.globalplatform.card-content-mgt-response";
-                                "vnd.gmx - DEPRECATED";
+                                "vnd.gmx"; (* DEPRECATED *)
                                 "vnd.google-earth.kml+xml";
                                 "vnd.google-earth.kmz";
                                 "vnd.gov.sk.e-form+xml";
@@ -1041,7 +1041,7 @@ let iana =
                                 "vnd.ims.lti.v2.toolsettings+json";
                                 "vnd.ims.lti.v2.toolsettings.simple+json";
                                 "vnd.informedcontrol.rms+xml";
-                                "vnd.informix-visionary - OBSOLETED in favor of application/vnd.visionary";
+                                "vnd.informix-visionary"; (* OBSOLETED in favor of application/vnd.visionary *)
                                 "vnd.infotech.project";
                                 "vnd.infotech.project+xml";
                                 "vnd.innopath.wamp.notification";
@@ -1201,7 +1201,7 @@ let iana =
                                 "vnd.nokia.landmarkcollection+xml";
                                 "vnd.nokia.n-gage.ac+xml";
                                 "vnd.nokia.n-gage.data";
-                                "vnd.nokia.n-gage.symbian.install - OBSOLETE; no replacement given";
+                                "vnd.nokia.n-gage.symbian.install"; (* OBSOLETE; no replacement given *)
                                 "vnd.nokia.ncd";
                                 "vnd.nokia.pcd+wbxml";
                                 "vnd.nokia.pcd+xml";
