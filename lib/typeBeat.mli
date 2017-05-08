@@ -2,7 +2,7 @@
 
     The purpose of the ["Content-Type"] field is to describe the data contained
     in the body fully enough that the receiving user agent can pick an
-    appropriate agent or mechanism to present the date to the user, or otherwise
+    appropriate agent or mechanism to present the data to the user, or otherwise
     deal with the data in an appropriate manner. The value in this field is
     called a media type.
 
@@ -19,7 +19,7 @@
 
     If another top-level type is to be used for any reason, it must be given a
     name starting with ["X-"] to indicate its non-standard status and to avoid a
-    potential conflict with a future officiel name.
+    potential conflict with a future official name.
 *)
 type ty      =
   [ `Application
@@ -35,17 +35,17 @@ type ty      =
 (** While the subtype specifies a specific format for that type of data. Thus, a
     media type of ["image/xyz"] is enough to tell a user agent that the data is
     an image, even if the user agent has no knowledge of the specific image
-    format ["xyz"]. Such information be used, for example, to decide whether or
-    not to show a user the raw data from an unrecognized sbtype -- such an
+    format ["xyz"]. Such information can be used, for example, to decide whether or
+    not to show a user the raw data from an unrecognized subtype -- such an
     action might be reasonable for unrecognized subtype of text, but not for
     unrecognized subtypes of image or audio.
 
     For this reason, registered subtypes of text, image, audio and video should
-    not contain embedded information tht is really of a different type. Such
+    not contain embedded information that is really of a different type. Such
     compound formats should be represented using the ["multipart"] or
     ["application"] types.
 
-    TypeBeat recognize 3 subtypes:
+    TypeBeat recognizes 3 subtypes:
     - Subtype from the
     {{:http://www.iana.org/assignments/media-types/media-types.xhtml}IANA
     database}: [`Iana_token]
@@ -58,18 +58,18 @@ type subty   =
   | `X_token of string ]
 
 (** Parameters are modifiers of the media subtype, and as such do not
-    fundamentally affter the nature of the content. The set of meaningful
+    fundamentally alter the nature of the content. The set of meaningful
     parameters depends on the media type and subtype, However, a given top-level
     media type may define parameters which are applicable to any subtype of that
     type.
 
-    Parameters may be required by their defining content type of subtype or they
+    Parameters may be required by their defining content type or subtype or they
     may be optional. TypeBeat does not check any assumption about parameters
-    except for the [`Multipart] where he expects the ["boundary"] parameter -
-    but TypeBeat does not processing (not yet!) the ["charset"] parameter for
+    except for the [`Multipart] where it expects the ["boundary"] parameter -
+    but TypeBeat does not process (not yet!) the ["charset"] parameter for
     example.
 
-    Note that the value of parameter can be a quoted string ([`String]). In this
+    Note that the value of a parameter can be a quoted string ([`String]). In this
     case, the value does not include the quotes. That is, the quotation marks in
     a quoted-string are not a part of the value of the parameter, but are merely
     used to delimit that parameter value. In other case, the value is [`Token].
@@ -86,21 +86,21 @@ type content =
   ; subty      : subty
   ; parameters : (string * value) list }
 
-(** [pp_ty ty] prints an human readable representation of {!ty}. *)
+(** [pp_ty ty] prints a human-readable representation of {!ty}. *)
 val pp_ty         : Format.formatter -> ty -> unit
 
-(** [pp_subty subty] prints an human readable representation of {!subty}. *)
+(** [pp_subty subty] prints a human-readable representation of {!subty}. *)
 val pp_subty      : Format.formatter -> subty -> unit
 
-(** [pp_value value] prints an human readable representation of {!value}. *)
+(** [pp_value value] prints a human-readable representation of {!value}. *)
 val pp_value      : Format.formatter -> value -> unit
 
-(** [pp_value (attribute, value)] prints an human readable representation of
+(** [pp_parameter (attribute, value)] prints a human-readable representation of
     [parameter].
 *)
 val pp_parameter  : Format.formatter -> (string * value) -> unit
 
-(** [pp content] prints an human readable representation of {!content}. *)
+(** [pp content] prints a human-readable representation of {!content}. *)
 val pp            : Format.formatter -> content -> unit
 
 val make          : ?parameters:(string * value) list -> ty -> string -> content
@@ -115,8 +115,8 @@ val equal         : ?insensitive:[ `All | `Parameters of string list ] -> conten
     Content-Type: text/plain; charset=use-ascii
     ]}
 
-    This is assumed is no ["Content-Type"] header field is specified. It is also
-    recommend that this default be assumed when a syntactically invalid
+    This is assumed when no ["Content-Type"] header field is specified. It is also
+    recommended that this default be assumed when a syntactically invalid
     ["Content-Type"] header field is encountered.
 *)
 val default       : content
@@ -130,15 +130,15 @@ type error =
 
 (** [of_string str] parses an
     {{:https://tools.ietf.org/html/rfc2045#section-5.1}RFC2045} {!content}
-    starting at [0] in [str]. We put on the string [str] the CRLF line break at
-    the end so we ensure than the parsing terminate.
+    starting at [0] in [str]. We append a CRLF line break to the string [str]
+    to ensure that the parsing terminates.
 *)
 val of_string     : string -> (content, error) result
 
 (** [of_string_with_crlf str] parses an
     {{:https://tools.ietf.org/html/rfc2045#section-5.1}RFC2045} {!content}
-    starting at [0] in [str]. We {b don't} put on the string [str] the CRLF line
-    break but we expect this line break inside [str]. We need the CRLF line
+    starting at [0] in [str]. We {b don't} append a CRLF line break to the string [str]
+    but we expect this line break inside [str]. We need the CRLF line
     break to terminate the parsing.
 *)
 val of_string_with_crlf : string -> (content, error) result
@@ -150,7 +150,7 @@ val of_string_with_crlf : string -> (content, error) result
     - [content] the {!content}
     - [count] the number of byte read starting at [off] to parse the [content].
 
-    We {b don't} put on the string [str] the CRLF line break at the end but we
+    We {b don't} append a CRLF line break to the string [str] but we
     expect this line break inside [str]. We the the CRLF line break to terminate
     the parsing.
 *)
