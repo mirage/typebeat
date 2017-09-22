@@ -1,6 +1,8 @@
 TypeBeat - Agnostic parser of the `Content-Type` in OCaml
 =========================================================
 
+[![Build Status](https://travis-ci.org/oklm-wsh/TypeBeat.svg?branch=master)](https://travis-ci.org/oklm-wsh/TypeBeat)
+
 TypeBeat is a pure implementation of the parsing of the `Content-Type`'s value
 (see [RFC822](https://tools.ietf.org/html/rfc822) and
 [RFC2045](https://tools.ietf.org/html/rfc2045)). The reason of this *light*
@@ -51,7 +53,7 @@ val parser : content Angstrom.t
 ```
 
 But the parser does not terminate because we have the `CFWS` token at the end.
-What that means? The parser expect an `End of input` or any character different
+What does that mean? The parser expects an `End of input` or any character other
 than `wsp` (and you can produce that by `Angstrom.Unbuffered.Complete`) to
 check that the hypothetical next line is a new field. Because, as you know, we
 can write something like:
@@ -61,11 +63,11 @@ Content-Type: text/html;^CRLF
  charset="utf-8"
 ```
 
-And it still valid (see RFC822)!
+And it is still valid (see RFC822)!
 
-Another point is that this library has all
-of [IANA](https://www.iana.org/assignments/media-types/media-types.xhtml) media
-type database (dated from 2016-06-01), so we recognize the IANA media types
+Another point is that this library has all of the
+[IANA media types database](https://www.iana.org/assignments/media-types/media-types.xhtml)
+(dated 2016-06-01), so we recognize the IANA media types
 automatically.
 
 ## Build Requirements
