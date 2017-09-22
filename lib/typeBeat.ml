@@ -117,16 +117,21 @@ type error =
 let parser = Rfc2045.content
 
 let of_string_with_crlf s =
+  let bs = Bigarray.Array1.create Bigarray.Char Bigarray.c_layout (String.length s) in
+
+  for i = 0 to String.length s - 1
+  do Bigarray.Array1.set bs i (String.get s i) done;
+
   let rec aux second_time = function
     | Fail (_, path, err) -> Error (`Invalid (err, path))
     | Partial { continue; _ } ->
       if second_time
       then Error `Incomplete
-      else aux true @@ continue (`String s) Complete (* avoid the CFWS token *)
+      else aux true @@ continue bs Complete (* avoid the CFWS token *)
     | Done (_, v) -> Ok v
   in
 
-  aux false @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* option () Rfc822.cfws <* Rfc822.crlf <* commit)
+  aux false @@ parse ~input:bs Angstrom.(Rfc2045.content <* option () Rfc822.cfws <* Rfc822.crlf <* commit)
 
   (* XXX(dinosaure): the last CFWS was due to: 'Content-Type: CFWS content-value
                      CFWS CRLF'. the [content] handles the CFWS token inside the
@@ -141,13 +146,18 @@ let of_string s = of_string_with_crlf (s ^ "\r\n")
 let of_string_raw s off len =
   let s = String.sub s off len in
 
+  let bs = Bigarray.Array1.create Bigarray.Char Bigarray.c_layout (String.length s) in
+
+  for i = 0 to String.length s - 1
+  do Bigarray.Array1.set bs i (String.get s i) done;
+
   let rec aux second_time = function
     | Fail (_, path, err) -> Error (`Invalid (err, path))
     | Partial {  continue; _ } ->
       if second_time
       then Error `Incomplete
-      else aux true @@ continue (`String s) Complete (* avoid the CFWS token *)
+      else aux true @@ continue bs Complete (* avoid the CFWS token *)
     | Done (committed, v) -> Ok (v, committed)
   in
 
-  aux false @@ parse ~input:(`String s) Angstrom.(Rfc2045.content <* option () Rfc822.cfws <* Rfc822.crlf <* commit)
+  aux false @@ parse ~input:bs Angstrom.(Rfc2045.content <* option () Rfc822.cfws <* Rfc822.crlf <* commit)

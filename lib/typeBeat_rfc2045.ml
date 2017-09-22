@@ -71,7 +71,7 @@ let ietf_token = token
 let iana_token = token
 
 let of_string s p =
-  match parse_only p (`String s) with
+  match parse_string p s with
   | Ok x -> Some x
   | Error _ -> None
 
