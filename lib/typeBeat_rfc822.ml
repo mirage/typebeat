@@ -100,8 +100,6 @@ let fws =
        >>= fun (has_wsp, has_crlf) -> many1 wsp
        *> return (has_wsp, has_crlf, true))
 
-let ignore p = p *> return ()
-
 let comment =
   (fix @@ fun comment ->
     let ccontent =
