@@ -1,7 +1,0 @@
-description = "Agnostic parser of the f****** Content-Type"
-version = "%%VERSION%%"
-requires = "angstrom"
-archive(byte) = "typeBeat.cma"
-archive(native) = "typeBeat.cmxa"
-plugin(byte) = "typeBeat.cma"
-plugin(native) = "typeBeat.cmxs"

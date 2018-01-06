@@ -1,7 +1,3 @@
-module Rfc2045 = TypeBeat_rfc2045
-module Rfc822  = TypeBeat_rfc822
-module Iana    = TypeBeat_iana
-
 type ty      = Rfc2045.ty
 type subty   = Rfc2045.subty
 type value   = Rfc2045.value

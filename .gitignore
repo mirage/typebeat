@@ -1,0 +1,6 @@
+.*.swp
+*.install
+.merlin
+_opam
+_build
+.DS_Store
