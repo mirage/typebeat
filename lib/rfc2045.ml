@@ -1,6 +1,3 @@
-module Rfc822 = TypeBeat_rfc822
-module Iana   = TypeBeat_iana
-
 type discrete =
   [ `Text
   | `Image
