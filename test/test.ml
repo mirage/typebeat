@@ -32,7 +32,12 @@ let tests_rfc7231 =
   ; "text/html; charset=\"utf-8\"",
     TypeBeat.make `Text "html" ~parameters:[("charset", `Token "utf-8")] ]
 
+let tests =
+  [ "application/xhtml+xml",
+    TypeBeat.make `Application "xhtml+xml" ]
+
 let () =
   Alcotest.run "Content-Type tests"
-    [ "RFC2045", List.map make_test tests_rfc2045
-    ; "RFC7231", List.map make_test tests_rfc7231 ]
+    [ "RFC 2045", List.map make_test tests_rfc2045
+    ; "RFC 7231", List.map make_test tests_rfc7231
+    ; "Tests", List.map make_test tests ]

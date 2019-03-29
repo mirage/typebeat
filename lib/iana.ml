@@ -1,5 +1,11 @@
-module Map = Map.Make(String)
-module Set = Set.Make(String)
+module Label = struct
+  type t = string
+
+  let compare a b = String.(compare (lowercase_ascii a) (lowercase_ascii b))
+end
+
+module Map = Map.Make(Label)
+module Set = Set.Make(Label)
 
 (* last update 2016-06-01 *)
 
