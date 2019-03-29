@@ -113,13 +113,15 @@ let ty_to_string = function
   | `Multipart -> "multipart"
   | `Ietf_token s | `X_token s -> s
 
+let invalid_token token = Format.kasprintf fail "invalid token: %s" token
+
 let subty ty =
-  (peek_char_fail <?> "subty" >>= function
-   | 'X' | 'x' -> extension_token
-   | _ -> token >>| fun v ->
-     try `Iana_token (Iana.Set.find (String.lowercase_ascii v) (Iana.Map.find (ty_to_string ty) Iana.iana))
-     with _ -> `X_token v)
-  >>| fun subty -> (ty, subty)
+  token
+  >>= fun s ->
+  try let v = `Iana_token (Iana.Set.find s (Iana.Map.find (ty_to_string ty) Iana.iana)) in return (ty, v)
+  with Not_found -> match of_string s extension_token with
+    | Some v -> return (ty, v)
+    | None -> invalid_token s
 
 let value =
   (Rfc822.quoted_string >>| fun v -> `String v)
