@@ -1,9 +1,0 @@
-(executables
- ((names (test))
-  (libraries (alcotest typebeat))
-))
-
-(alias
-((name    runtest)
-  (deps    (test.exe))
-  (action  (run ${<}))))

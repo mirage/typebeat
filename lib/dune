@@ -1,0 +1,4 @@
+(library
+ (name TypeBeat)
+ (public_name typebeat)
+ (libraries angstrom))
